@@ -1,32 +1,34 @@
 import {useState} from "react";
 
 function TheForm() {
-	const initialData = {
-		title: "",
-		author: "",
-		published: false,
-	};
-
-	// const [title, setTitle] = useState("");
+	// const initialData = {title: "", author: "", published: false};
 	const [articles, setArticles] = useState([]);
-	const [articleData, setArticleData] = useState(initialData);
+	const [title, setTitle] = useState("");
+	const [author, setAuthor] = useState("");
+	const [published, setPublished] = useState(false);
 
-	// function handleTitleChange(event) {
-	// 	setTitle(event.target.value);
-	// }
-	function handleChange(event) {
-		const {name, value, type, checked} = event.target;
-		setArticleData({
-			...articleData,
-			[name]: type === "checkbox" ? checked : value,
-		});
+	function handleTitleChange(event) {
+		setTitle(event.target.value);
+	}
+
+	function handleAuthorChange(event) {
+		setAuthor(event.target.value);
+	}
+
+	function handlePublishedChange(event) {
+		setPublished(event.target.checked);
 	}
 
 	function handleFormSubmit(event) {
 		event.preventDefault();
-		if (articleData.title && articleData.author) {
-			setArticles([...articles, {...articleData, id: crypto.randomUUID()}]);
-			setArticleData(initialData);
+		if (title && author) {
+			setArticles([
+				...articles,
+				{title, author, published, id: crypto.randomUUID()},
+			]);
+			setTitle("");
+			setAuthor("");
+			setPublished(false);
 		}
 	}
 
@@ -49,10 +51,11 @@ function TheForm() {
 						type="text"
 						name="title"
 						id="title"
-						value={articleData.title}
-						onChange={handleChange}
+						value={title}
+						onChange={handleTitleChange}
 					/>
 				</div>
+
 				<div className="flex items-center space-x-2">
 					<label className="text-white" htmlFor="author">
 						Autore:
@@ -62,10 +65,11 @@ function TheForm() {
 						type="text"
 						name="author"
 						id="author"
-						value={articleData.author}
-						onChange={handleChange}
+						value={author}
+						onChange={handleAuthorChange}
 					/>
 				</div>
+
 				<div className="flex items-center space-x-2">
 					<label className="text-white" htmlFor="published">
 						Pubblicato:
@@ -74,19 +78,19 @@ function TheForm() {
 						type="checkbox"
 						name="published"
 						id="published"
-						checked={articleData.published}
-						onChange={handleChange}
+						checked={published}
+						onChange={handlePublishedChange}
 					/>
 				</div>
+
 				<button
 					type="submit"
-					className="mb-16 bg-purple-800 text-slate-200 px-4 py-2 rounded transition delay-150 hover:bg-purple-600 hover:text-white">
+					className="bg-purple-800 text-slate-200 px-4 py-2 rounded hover:bg-purple-600 hover:text-white">
 					Aggiungi
 				</button>
 			</form>
 
-			{/* print a list of titles */}
-			<div className="flex justify-center mt-5 text-zinc-300">
+			<div className="mt-12 flex justify-center text-zinc-300">
 				<div className="w-full max-w-2xl">
 					{articles.length > 0 && (
 						<div className="grid grid-cols-4 gap-4 text-white mb-2">

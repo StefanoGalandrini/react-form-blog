@@ -1,34 +1,27 @@
 import {useState} from "react";
 
 function TheForm() {
-	// const initialData = {title: "", author: "", published: false};
+	const initialData = {title: "", author: "", published: false};
+	const [articleData, setArticleData] = useState(initialData);
 	const [articles, setArticles] = useState([]);
-	const [title, setTitle] = useState("");
-	const [author, setAuthor] = useState("");
-	const [published, setPublished] = useState(false);
 
 	function handleTitleChange(event) {
-		setTitle(event.target.value);
+		setArticleData({...articleData, title: event.target.value});
 	}
 
 	function handleAuthorChange(event) {
-		setAuthor(event.target.value);
+		setArticleData({...articleData, author: event.target.value});
 	}
 
 	function handlePublishedChange(event) {
-		setPublished(event.target.checked);
+		setArticleData({...articleData, published: event.target.checked});
 	}
 
 	function handleFormSubmit(event) {
 		event.preventDefault();
-		if (title && author) {
-			setArticles([
-				...articles,
-				{title, author, published, id: crypto.randomUUID()},
-			]);
-			setTitle("");
-			setAuthor("");
-			setPublished(false);
+		if (articleData.title && articleData.author) {
+			setArticles([...articles, {...articleData, id: crypto.randomUUID()}]);
+			setArticleData(initialData); // Reset dopo l'invio
 		}
 	}
 
@@ -51,11 +44,10 @@ function TheForm() {
 						type="text"
 						name="title"
 						id="title"
-						value={title}
+						value={articleData.title}
 						onChange={handleTitleChange}
 					/>
 				</div>
-
 				<div className="flex items-center space-x-2">
 					<label className="text-white" htmlFor="author">
 						Autore:
@@ -65,11 +57,10 @@ function TheForm() {
 						type="text"
 						name="author"
 						id="author"
-						value={author}
+						value={articleData.author}
 						onChange={handleAuthorChange}
 					/>
 				</div>
-
 				<div className="flex items-center space-x-2">
 					<label className="text-white" htmlFor="published">
 						Pubblicato:
@@ -78,11 +69,10 @@ function TheForm() {
 						type="checkbox"
 						name="published"
 						id="published"
-						checked={published}
+						checked={articleData.published}
 						onChange={handlePublishedChange}
 					/>
 				</div>
-
 				<button
 					type="submit"
 					className="bg-purple-800 text-slate-200 px-4 py-2 rounded hover:bg-purple-600 hover:text-white">
